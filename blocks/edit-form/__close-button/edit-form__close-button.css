@@ -1,0 +1,16 @@
+.edit-form__close-button {
+    background-color: #000;
+    background-image: url('../../../images/close-button.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    min-width: 47px;
+    min-height: 47px;
+    position: absolute;
+    top: -47px;
+    right: -47px;
+    transition: opacity 1s linear;
+}
+
+.edit-form__close-button:hover {
+    opacity: 0.6;
+}
