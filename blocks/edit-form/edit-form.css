@@ -5,8 +5,7 @@
     height: 100%;
     top: 0;
     left: 0;
-    display: flex;
+    display: none;
     justify-content: center;
-    align-items: flex-start;
-    /* overflow: hidden; */
+    align-items: center;
 }

@@ -5,7 +5,8 @@
     line-height: 1.22;
     margin: 0;
     padding: 0;
-    max-width: 318px;
+    /* min-width: 318px; */
+    word-break: break-all;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }

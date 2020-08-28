@@ -1,6 +1,8 @@
 .edit-form__save-button {
     width: 100%;
     min-height: 50px;
+    box-shadow: none;
+    border: none;
     background-color: rgba(0,0,0,1);
     color: #fff;
     font-weight: normal;
@@ -10,9 +12,10 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     border-radius: 2px;
-    transition: background-color 1s linear;
+    transition: background-color 0.8s linear;
 }
 
 .edit-form__save-button:hover {
     background-color: rgba(0,0,0,0.8);
+    cursor: pointer;
 }

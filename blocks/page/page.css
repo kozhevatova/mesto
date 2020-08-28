@@ -1,10 +1,6 @@
-* {
-    outline: 1px solid red;
-}
-
 .page {
     background-color: #000;
-    min-width: 320px;
     font-family: 'Inter', 'Arial', sans-serif;
     font-style: normal;
+    min-width: 320px;
 }
