@@ -1,4 +1,6 @@
 .profile__avatar {
+    background: center/contain url('../../../images/Avatar.jpg') no-repeat;
     border-radius: 50%;
-    width: 120px;
+    min-width: 120px;
+    min-height: 120px;
 }

@@ -1,9 +1,8 @@
 .header__logo {
-    background-color: #000;
+    background: center/contain url('../../../images/header-logo-image.svg') no-repeat #000;
     max-width: 142.01px;
-    max-height: 33.4px;
+    min-height: 33.4px;
     width: 16.1%;
-    object-fit: contain;
 }
 
 @media screen and (min-width: 720px) and (max-width: 1279px) {
@@ -22,6 +21,6 @@
     .header__logo {
         min-width: 103.74px;
         min-height: 24.4px;
-        
+        margin-left: 8.438vw;
     }
 }

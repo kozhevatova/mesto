@@ -11,68 +11,74 @@
     <title>Сервис Mesto</title>
 </head>
 
-<body>
-    <div class="page">
+<body class="page">
+    <div class="page__container">
         <header class="header">
-            <img src="./images/header-logo-image.svg" alt="Логотип сервиса Место." class="header__logo">
+            <div class="header__logo"></div>
         </header>
 
         <main class="content">
             <section class="profile">
-                <img src="./images/Avatar.jpg" alt="Портрет мужчины на фоне моря." class="profile__avatar">
+                <div class="profile__avatar"></div>
                 <div class="profile__info">
                     <div class="profile__title">
                         <h1 class="profile__name">Жак-Ив Кусто</h1>
-                        <button class="profile__edit-button"></button>
+                        <button class="profile__edit-button" type="button" aria-label="Редактировать профиль."></button>
                     </div>
                     <p class="profile__subtitle">Исследователь океана</p>
                 </div>
-                <button class="profile__add-button"></button>
+                <button class="profile__add-button" type="button" aria-label="Добавить фотографию."></button>
             </section>
 
-            <section class="elements">
-                <div class="element">
-                    <img src="./images/karachaevsc.jpg" alt="Крепость на холме в Крачаево-Черкесии." class="element__image">
-                    <div class="element__title">
-                        <h3 class="element__place-name">Карачаево-Черкессия</h3>
-                        <button class="element__like"></button>
-                    </div>
-                </div>
-                <div class="element">
-                    <img src="./images/elbrus.jpg" alt="Гора Эльбрус на закате." class="element__image">
-                    <div class="element__title">
-                        <h3 class="element__place-name">Гора Эльбрус</h3>
-                        <button class="element__like"></button>
-                    </div>
-                </div>
-                <div class="element">
-                    <img src="./images/dombay.jpg" alt="Лес и горы в Домбае." class="element__image">
-                    <div class="element__title">
-                        <h3 class="element__place-name">Домбай</h3>
-                        <button class="element__like"></button>
-                    </div>
-                </div>
-                <div class="element">
-                    <img src="./images/kamchatka-alex-glebov.jpg" alt="Берег океана на Камчатке." class="element__image">
-                    <div class="element__title">
-                        <h3 class="element__place-name">Камчатка</h3>
-                        <button class="element__like"></button>
-                    </div>
-                </div>
-                <div class="element">
-                    <img src="./images/komi-vladimir-fedotov.jpg" alt="Река зимой в лесу в Республике Коми." class="element__image">
-                    <div class="element__title">
-                        <h3 class="element__place-name">Республика Коми</h3>
-                        <button class="element__like"></button>
-                    </div>
-                </div>
-                <div class="element">
-                    <img src="./images/baikal-markus-winkler.jpg" alt="Озеро Байкал." class="element__image">
-                    <div class="element__title">
-                        <h3 class="element__place-name">Байкал</h3>
-                        <button class="element__like"></button>
-                    </div>
-                </div>
+            <section>
+                <ul class="elements">
+                    <li class="element">
+                        <img src="./images/karachaevsc.jpg" alt="Крепость на холме в Крачаево-Черкесcии."
+                            class="element__image">
+                        <div class="element__image"></div>
+                        <div class="element__title">
+                            <h2 class="element__place-name">Карачаево-Черкессия</h2>
+                            <button class="element__like" type="button" aria-label="Поставить лайк."></button>
+                        </div>
+                    </li>
+                    <li class="element">
+                        <img src="./images/elbrus.jpg" alt="Гора Эльбрус на закате." class="element__image">
+                        <div class="element__title">
+                            <h2 class="element__place-name">Гора Эльбрус</h2>
+                            <button class="element__like" type="button" aria-label="Поставить лайк."></button>
+                        </div>
+                    </li>
+                    <li class="element">
+                        <img src="./images/dombay.jpg" alt="Лес и горы в Домбае." class="element__image">
+                        <div class="element__title">
+                            <h2 class="element__place-name">Домбай</h2>
+                            <button class="element__like" type="button" aria-label="Поставить лайк."></button>
+                        </div>
+                    </li>
+                    <li class="element">
+                        <img src="./images/kamchatka-alex-glebov.jpg" alt="Берег океана на Камчатке."
+                            class="element__image">
+                        <div class="element__title">
+                            <h2 class="element__place-name">Камчатка</h2>
+                            <button class="element__like" type="button" aria-label="Поставить лайк."></button>
+                        </div>
+                    </li>
+                    <li class="element">
+                        <img src="./images/komi-vladimir-fedotov.jpg" alt="Река зимой в лесу в Республике Коми."
+                            class="element__image">
+                        <div class="element__title">
+                            <h2 class="element__place-name">Республика Коми</h2>
+                            <button class="element__like" type="button" aria-label="Поставить лайк."></button>
+                        </div>
+                    </li>
+                    <li class="element">
+                        <img src="./images/baikal-markus-winkler.jpg" alt="Озеро Байкал." class="element__image">
+                        <div class="element__title">
+                            <h2 class="element__place-name">Байкал</h2>
+                            <button class="element__like" type="button" aria-label="Поставить лайк."></button>
+                        </div>
+                    </li>
+                </ul>
             </section>
         </main>
 
@@ -80,15 +86,15 @@
             <p class="footer__copyright">&copy; 2020 Mesto Russia</p>
         </footer>
 
-        <section class="edit-form">
-            <div class="edit-form__container">
-                <button class="edit-form__close-button"></button>
+        <div class="edit-form">
+            <form class="edit-form__container" method="POST" name="profileForm">
+                <button class="edit-form__close-button" type="button" aria-label="Закрыть форму редактирования."></button>
                 <h3 class="edit-form__title">Редактировать профиль</h3>
-                <input type="text" class="edit-form__name" placeholder="Имя">
-                <input type="text" class="edit-form__description" placeholder="О себе">
-                <input type="submit" class="edit-form__save-button" value="Сохранить">
-            </div>
-        </section>
+                <input type="text" class="edit-form__name" name="profileName" placeholder="Имя">
+                <input type="text" class="edit-form__description" name="profileDescription" placeholder="О себе">
+                <button type="submit" class="edit-form__save-button">Сохранить</button>
+            </form>
+        </div>
     </div>
 
     <script src="./scripts/index.js"></script>
