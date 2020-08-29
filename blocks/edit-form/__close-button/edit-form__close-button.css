@@ -2,9 +2,7 @@
     background: none;
     border: none;
     box-shadow: none;
-    background-image: url('../../../images/close-button.svg');
-    background-size: contain;
-    background-repeat: no-repeat;
+    background: center/contain url('../../../images/close-button.svg') no-repeat;
     min-width: 47px;
     min-height: 47px;
     position: absolute;
