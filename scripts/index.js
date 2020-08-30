@@ -12,13 +12,13 @@ const inputProfileName = editForm.querySelector('.edit-form__name');
 const inputProfileDescription = editForm.querySelector('.edit-form__description');
 
 const editFormToggle = () => {
-    editForm.classList.toggle('edit-form_opened');
-    page.classList.toggle('page_overflow-hidden');
-
-    if(editForm.classList.contains('edit-form_opened')) {
+    if(!editForm.classList.contains('edit-form_opened')) {
         inputProfileName.value = profileName.textContent;
         inputProfileDescription.value = profileDescription.textContent;
     }
+
+    editForm.classList.toggle('edit-form_opened');
+    page.classList.toggle('page_overflow-hidden');
 }
 
 const changeStateEditForm = (event) => {
