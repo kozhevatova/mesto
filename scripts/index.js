@@ -12,28 +12,28 @@ const inputProfileName = editForm.querySelector('.edit-form__name');
 const inputProfileDescription = editForm.querySelector('.edit-form__description');
 
 const editFormToggle = () => {
-    if(!editForm.classList.contains('edit-form_opened')) {
-        inputProfileName.value = profileName.textContent;
-        inputProfileDescription.value = profileDescription.textContent;
-    }
+  if (!editForm.classList.contains('edit-form_opened')) {
+    inputProfileName.value = profileName.textContent;
+    inputProfileDescription.value = profileDescription.textContent;
+  }
 
-    editForm.classList.toggle('edit-form_opened');
-    page.classList.toggle('page_overflow-hidden');
-}
+  editForm.classList.toggle('edit-form_opened');
+  page.classList.toggle('page_overflow-hidden');
+};
 
 const changeStateEditForm = (event) => {
-    if(event.target !== event.currentTarget) {
-        return;
-    }
-    editFormToggle();
+  if (event.target !== event.currentTarget) {
+    return;
+  }
+  editFormToggle();
 };
 
 const editFromSubmitHandler = (event) => {
-    event.preventDefault();
+  event.preventDefault();
 
-    profileName.textContent = inputProfileName.value;
-    profileDescription.textContent = inputProfileDescription.value;
-    editFormToggle();
+  profileName.textContent = inputProfileName.value;
+  profileDescription.textContent = inputProfileDescription.value;
+  editFormToggle();
 };
 
 editButton.addEventListener('click', changeStateEditForm);

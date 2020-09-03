@@ -1,0 +1,27 @@
+{
+  "name": "mesto",
+  "version": "1.0.0",
+  "description": "### Обзор",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "eslint": "eslint ./scripts",
+    "eslintFix": "eslint ./scripts --fix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kozhevatova/mesto.git"
+  },
+  "author": "Anna_Kozhevatova",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kozhevatova/mesto/issues"
+  },
+  "homepage": "https://github.com/kozhevatova/mesto#readme",
+  "devDependencies": {
+    "eslint": "^7.8.1",
+    "eslint-config-airbnb": "^18.2.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-plugin-import": "^2.22.0"
+  }
+}
