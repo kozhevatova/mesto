@@ -1,4 +1,4 @@
-.edit-form__close-button {
+.popup__close-button {
     background: none;
     border: none;
     box-shadow: none;
@@ -11,13 +11,13 @@
     transition: opacity 0.8s linear;
 }
 
-.edit-form__close-button:hover {
+.popup__close-button:hover {
     opacity: 0.6;
     cursor: pointer;
 }
 
 @media screen and (min-width:320px) and (max-width: 479px) {
-    .edit-form__close-button {
+    .popup__close-button {
         min-width: 30px;
         min-height: 30px;
         top: -30px;
