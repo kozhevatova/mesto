@@ -23,7 +23,7 @@ const closeAddFormButton = popupAddForm.querySelector('.popup__close-button');
 const inputPhotoName = popupAddForm.querySelector('.popup__name');
 const inputPhotoLink = popupAddForm.querySelector('.popup__description');
 
-//для приближения фото
+// для приближения фото
 const popupZoomedImage = page.querySelector('.popup_type_zoomed-image');
 const popupImage = popupZoomedImage.querySelector('.popup__image');
 const closeButtonZoomedImage = popupZoomedImage.querySelector('.popup__close-button');
@@ -56,46 +56,10 @@ const initialCards = [
   },
 ];
 
-// добавление новой фото
-const addElement = (name, link) => {
-  const element = elementTemplate.cloneNode(true);
-  const elementImage = element.querySelector('.element__image');
-
-  element.querySelector('.element__place-name').textContent = name;
-  elementImage.src = link;
-
-  //добавление лайка
-  element.querySelector('.element__like').addEventListener('click', (event) => {
-    event.target.classList.toggle('element__like_active');
-  });
-
-  //удаление фото
-  element.querySelector('.element__delete-button').addEventListener('click', (event) => {
-    event.target.parentElement.remove();
-    if (elements.length > 0) {
-      elements.splice(elements.indexOf(event.target.parentElement), 1);
-    }
-  });
-
-  //приближение фото
-  elementImage.addEventListener('click', (event) => {
-    popupImage.src = event.target.src;
-    imageName.textContent = event.target.parentElement.querySelector('.element__place-name').textContent;
-    changeStatePopup(event,popupZoomedImage);
-  });
-
-  return element;
-};
-
-// добавление фотографий на страницу "из коробки"
-const elements = initialCards.map((item) => addElement(item.name, item.link));
-
-elementsContainer.append(...elements);
-
 // открытие/закрытие попапа
 const popupToggle = (popup) => {
-  if (!popup.classList.contains('popup_opened') &&
-    popup.classList.contains('popup_type_edit-form')) {
+  if (!popup.classList.contains('popup_opened')
+    && popup.classList.contains('popup_type_edit-form')) {
     inputProfileName.value = profileName.textContent;
     inputProfileDescription.value = profileDescription.textContent;
   }
@@ -103,10 +67,6 @@ const popupToggle = (popup) => {
   if (popup.classList.contains('popup_type_add-form')) {
     inputPhotoName.value = '';
     inputPhotoLink.value = '';
-  }
-
-  if(popup.classList.contains('popup_type_zoomed-image')) {
-    
   }
 
   popup.classList.toggle('popup_opened');
@@ -121,6 +81,39 @@ const changeStatePopup = (event, popup) => {
   popupToggle(popup);
 };
 
+// добавление новой фото
+const addElement = (name, link) => {
+  const element = elementTemplate.cloneNode(true);
+  const elementImage = element.querySelector('.element__image');
+
+  element.querySelector('.element__place-name').textContent = name;
+  elementImage.src = link;
+
+  // добавление лайка
+  element.querySelector('.element__like').addEventListener('click', (event) => {
+    event.target.classList.toggle('element__like_active');
+  });
+
+  // удаление фото
+  element.querySelector('.element__delete-button').addEventListener('click', (event) => {
+    event.target.parentElement.remove();
+  });
+
+  // приближение фото
+  elementImage.addEventListener('click', (event) => {
+    popupImage.src = event.target.src;
+    imageName.textContent = event.target.parentElement.querySelector('.element__place-name').textContent;
+    changeStatePopup(event, popupZoomedImage);
+  });
+
+  return element;
+};
+
+// добавление фотографий на страницу "из коробки"
+const elements = initialCards.map((item) => addElement(item.name, item.link));
+
+elementsContainer.append(...elements);
+
 // обработчик формы попапа
 const popupSubmitHandler = (event, popup) => {
   event.preventDefault();
@@ -134,7 +127,6 @@ const popupSubmitHandler = (event, popup) => {
     if (inputPhotoName.value !== '' && inputPhotoLink.value !== '') {
       const newElement = addElement(inputPhotoName.value, inputPhotoLink.value);
       elementsContainer.prepend(newElement);
-      elements.push(newElement);
     }
   }
 
@@ -172,11 +164,10 @@ inputPhotoLink.oninvalid = (event) => {
   event.target.setCustomValidity('Формат фото должен быть .jpg, .png или .svg');
 };
 
-//события попапа с приближенной фотографией
+// события попапа с приближенной фотографией
 closeButtonZoomedImage.addEventListener('click', (event) => {
-  changeStatePopup(event,popupZoomedImage);
+  changeStatePopup(event, popupZoomedImage);
 });
 popupZoomedImage.addEventListener('click', (event) => {
-  changeStatePopup(event,popupZoomedImage);
+  changeStatePopup(event, popupZoomedImage);
 });
-

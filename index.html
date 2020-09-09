@@ -23,19 +23,18 @@
                 <div class="profile__info">
                     <div class="profile__title">
                         <h1 class="profile__name">Жак-Ив Кусто</h1>
-                        <button class="profile__edit-button" type="button" 
-                            aria-label="Редактировать профиль."></button>
+                        <button class="profile__edit-button" type="button" aria-label="Редактировать профиль."></button>
                     </div>
                     <p class="profile__subtitle">Исследователь океана</p>
                 </div>
                 <button class="profile__add-button" type="button" aria-label="Добавить фотографию."></button>
             </section>
 
-            <section>
+            <div>
                 <ul class="elements">
                     <!-- фото добавляются через js -->
                 </ul>
-            </section>
+            </div>
         </main>
 
         <footer class="footer">
@@ -44,12 +43,10 @@
 
         <div class="popup popup_type_edit-form">
             <form class="popup__container" method="POST" name="profileForm">
-                <button class="popup__close-button" type="reset"
-                    aria-label="Закрыть форму редактирования."></button>
+                <button class="popup__close-button" type="reset" aria-label="Закрыть форму редактирования."></button>
                 <h3 class="popup__title">Редактировать профиль</h3>
                 <input type="text" class="popup__name" name="popupName" placeholder="Имя">
-                <input type="text" class="popup__description" name="popupDescription" 
-                    placeholder="О себе">
+                <input type="text" class="popup__description" name="popupDescription" placeholder="О себе">
                 <button type="submit" class="popup__save-button">Сохранить</button>
             </form>
         </div>
@@ -59,20 +56,18 @@
                 <button class="popup__close-button" type="reset"
                     aria-label="Закрыть форму добавления фотографий."></button>
                 <h3 class="popup__title">Новое место</h3>
-                <input type="text" class="popup__name" name="popupName" 
-                    placeholder="Название">
-                <input type="url" class="popup__description" name="popupDescription" 
-                    placeholder="Ссылка на картинку">
+                <input type="text" class="popup__name" name="popupName" placeholder="Название">
+                <input type="url" class="popup__description" name="popupDescription" placeholder="Ссылка на картинку">
                 <button type="submit" class="popup__save-button">Создать</button>
             </form>
         </div>
 
         <div class="popup popup_type_zoomed-image">
-            <figure class="popup__container popup__container_type_zoomed-image">
-                <img src="" alt="" class="popup__image">
-                <figcaption class="popup__name popup__name_place_zoomed-image"></figcaption>
+            <div class="popup__container popup__container_type_zoomed-image">
+                <img src="#" alt="Фотография." class="popup__image">
+                <p class="popup__name popup__name_place_zoomed-image"></p>
                 <button class="popup__close-button" type="reset"></button>
-            </figure>
+            </div>
         </div>
     </div>
 
@@ -81,11 +76,9 @@
             <img alt="Фотография." class="element__image">
             <div class="element__title">
                 <h2 class="element__place-name"></h2>
-                <button class="element__like" type="button" 
-                    aria-label="Поставить лайк."></button>
+                <button class="element__like" type="button" aria-label="Поставить лайк."></button>
             </div>
-            <button class="element__delete-button" type="button" 
-                aria-label="Удалить фото."></button>
+            <button class="element__delete-button" type="button" aria-label="Удалить фото."></button>
         </li>
     </template>
 
