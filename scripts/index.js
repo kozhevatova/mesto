@@ -57,32 +57,35 @@ const initialCards = [
 ];
 
 // открытие/закрытие попапа
-const popupToggle = (popup) => {
-  if (!popup.classList.contains('popup_opened')
-    && popup.classList.contains('popup_type_edit-form')) {
-    inputProfileName.value = profileName.textContent;
-    inputProfileDescription.value = profileDescription.textContent;
-  }
-
-  if (popup.classList.contains('popup_type_add-form')) {
-    inputPhotoName.value = '';
-    inputPhotoLink.value = '';
+const popupToggle = (event, popup) => {
+  if (event.target !== event.currentTarget) {
+    return;
   }
 
   popup.classList.toggle('popup_opened');
   page.classList.toggle('page_overflow-hidden');
 };
 
-const changeStatePopup = (event, popup) => {
-  if (event.target !== event.currentTarget) {
-    return;
+// обработчик нажатия на кнопку редактирования профиля
+const editButtonClickHandler = (event, popup) => {
+  if (!popup.classList.contains('popup_opened')) {
+    inputProfileName.value = profileName.textContent;
+    inputProfileDescription.value = profileDescription.textContent;
   }
 
-  popupToggle(popup);
+  popupToggle(event, popup);
+};
+
+// обработчик нажатия на кнопку добавления фото
+const addButtonClickHandler = (event, popup) => {
+  inputPhotoName.value = '';
+  inputPhotoLink.value = '';
+
+  popupToggle(event, popup);
 };
 
 // добавление новой фото
-const addElement = (name, link) => {
+const createCard = (name, link) => {
   const element = elementTemplate.cloneNode(true);
   const elementImage = element.querySelector('.element__image');
 
@@ -96,78 +99,78 @@ const addElement = (name, link) => {
 
   // удаление фото
   element.querySelector('.element__delete-button').addEventListener('click', (event) => {
-    event.target.parentElement.remove();
+    event.target.closest('.element').remove();
   });
 
   // приближение фото
   elementImage.addEventListener('click', (event) => {
     popupImage.src = event.target.src;
-    imageName.textContent = event.target.parentElement.querySelector('.element__place-name').textContent;
-    changeStatePopup(event, popupZoomedImage);
+    imageName.textContent = event.target.closest('.element').querySelector('.element__place-name').textContent;
+    popupToggle(event, popupZoomedImage);
   });
 
   return element;
 };
 
 // добавление фотографий на страницу "из коробки"
-const elements = initialCards.map((item) => addElement(item.name, item.link));
+const elements = initialCards.map((item) => createCard(item.name, item.link));
 
 elementsContainer.append(...elements);
 
-// обработчик формы попапа
-const popupSubmitHandler = (event, popup) => {
+// обработчик формы редактирования профиля
+const editFormSubmitHandler = (event, popup) => {
   event.preventDefault();
 
-  if (popup.classList.contains('popup_type_edit-form')) {
-    profileName.textContent = inputProfileName.value;
-    profileDescription.textContent = inputProfileDescription.value;
+  profileName.textContent = inputProfileName.value;
+  profileDescription.textContent = inputProfileDescription.value;
+
+  popupToggle(event, popup);
+};
+
+// обработчик формы добавления фото
+const addFormSubmitHandler = (event, popup) => {
+  event.preventDefault();
+
+  if (inputPhotoName.value !== '' && inputPhotoLink.value !== '') {
+    const newElement = createCard(inputPhotoName.value, inputPhotoLink.value);
+    elementsContainer.prepend(newElement);
   }
 
-  if (popup.classList.contains('popup_type_add-form')) {
-    if (inputPhotoName.value !== '' && inputPhotoLink.value !== '') {
-      const newElement = addElement(inputPhotoName.value, inputPhotoLink.value);
-      elementsContainer.prepend(newElement);
-    }
-  }
-
-  popupToggle(popup);
+  popupToggle(event, popup);
 };
 
 // события формы редактирования профиля
 editButton.addEventListener('click', (event) => {
-  changeStatePopup(event, popupEditForm);
+  editButtonClickHandler(event, popupEditForm);
 });
 closeEditFormButton.addEventListener('click', (event) => {
-  changeStatePopup(event, popupEditForm);
+  popupToggle(event, popupEditForm);
 });
 popupEditForm.addEventListener('click', (event) => {
-  changeStatePopup(event, popupEditForm);
+  popupToggle(event, popupEditForm);
 });
 popupContainerEditForm.addEventListener('submit', (event) => {
-  popupSubmitHandler(event, popupEditForm);
+  editFormSubmitHandler(event, popupEditForm);
 });
 
 // события формы добавления фотографий
 addButton.addEventListener('click', (event) => {
-  changeStatePopup(event, popupAddForm);
+  addButtonClickHandler(event, popupAddForm);
 });
 closeAddFormButton.addEventListener('click', (event) => {
-  changeStatePopup(event, popupAddForm);
+  popupToggle(event, popupAddForm);
 });
 popupAddForm.addEventListener('click', (event) => {
-  changeStatePopup(event, popupAddForm);
+  popupToggle(event, popupAddForm);
 });
 popupContainerAddForm.addEventListener('submit', (event) => {
-  popupSubmitHandler(event, popupAddForm);
+  addFormSubmitHandler(event, popupAddForm);
 });
-inputPhotoLink.oninvalid = (event) => {
-  event.target.setCustomValidity('Формат фото должен быть .jpg, .png или .svg');
-};
 
 // события попапа с приближенной фотографией
 closeButtonZoomedImage.addEventListener('click', (event) => {
-  changeStatePopup(event, popupZoomedImage);
+  popupToggle(event, popupZoomedImage);
 });
 popupZoomedImage.addEventListener('click', (event) => {
-  changeStatePopup(event, popupZoomedImage);
+  popupToggle(event, popupZoomedImage);
 });
