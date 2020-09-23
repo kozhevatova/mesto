@@ -1,0 +1,18 @@
+.popup__input-error {
+  display: none;
+  outline: 1px solid red;
+  width: 100%;
+  min-height: 12px;
+  padding: 0;
+  margin: 5px 0 13px;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 1.25;
+  color: #FF0000;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.popup__input-error:last-of-type {
+  margin-bottom: 31.4px;
+}

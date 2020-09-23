@@ -42,28 +42,37 @@
         </footer>
 
         <div class="popup popup_type_edit-form">
-            <form class="popup__container" method="POST" name="profileForm">
-                <button class="popup__close-button" type="reset" aria-label="Закрыть форму редактирования."></button>
+            <form class="popup__form" method="POST" name="profileForm">
+                <button class="popup__close-button" type="reset" 
+                    aria-label="Закрыть форму редактирования."></button>
                 <h3 class="popup__title">Редактировать профиль</h3>
-                <input type="text" class="popup__name" name="popupName" placeholder="Имя">
-                <input type="text" class="popup__description" name="popupDescription" placeholder="О себе">
-                <button type="submit" class="popup__save-button">Сохранить</button>
+                <input type="text" class="popup__input popup__name" name="popupName" 
+                    placeholder="Имя" required id="name-input" minlength="2" maxlength="40">
+                <span class="popup__input-error" id="name-input-error"></span>
+                <input type="text" class="popup__input popup__description" name="popupDescription" 
+                    placeholder="О себе" required id="description-input" minlength="2" maxlength="200">
+                <span class="popup__input-error" id="description-input-error"></span>
+                <button type="submit" class="popup__save-button popup__button popup__button_disabled">Сохранить</button>
             </form>
         </div>
 
         <div class="popup popup_type_add-form">
-            <form class="popup__container" method="POST" name="profileForm">
+            <form class="popup__form" method="POST" name="profileForm">
                 <button class="popup__close-button" type="reset"
                     aria-label="Закрыть форму добавления фотографий."></button>
                 <h3 class="popup__title">Новое место</h3>
-                <input type="text" class="popup__name" name="popupName" placeholder="Название">
-                <input type="url" class="popup__description" name="popupDescription" placeholder="Ссылка на картинку">
-                <button type="submit" class="popup__save-button">Создать</button>
+                <input type="text" class="popup__input popup__name" name="popupNames" 
+                    placeholder="Название" required id="title-input" minlength="2" maxlength="30">
+                <span class="popup__input-error" id="title-input-error"></span>
+                <input type="url" class="popup__input popup__description" name="popupDescription" 
+                    placeholder="Ссылка на картинку" required id="url-input">
+                <span class="popup__input-error" id="url-input-error"></span>
+                <button type="submit" class="popup__save-button popup__button popup__button_disabled">Создать</button>
             </form>
         </div>
 
         <div class="popup popup_type_zoomed-image">
-            <div class="popup__container popup__container_type_zoomed-image">
+            <div class="popup__form popup__form_type_zoomed-image">
                 <img src="#" alt="Фотография." class="popup__image">
                 <p class="popup__name popup__name_place_zoomed-image"></p>
                 <button class="popup__close-button" type="reset"></button>
@@ -81,8 +90,10 @@
             <button class="element__delete-button" type="button" aria-label="Удалить фото."></button>
         </li>
     </template>
-   
+ 
+
     <script src="./scripts/index.js"></script>
+    <script src="./scripts/validate.js"></script>
 </body>
 
 </html>

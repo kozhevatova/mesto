@@ -6,7 +6,7 @@ const elementTemplate = page.querySelector('#element-template').content;
 
 // для формы редактирования профиля
 const popupEditForm = page.querySelector('.popup_type_edit-form');
-const popupContainerEditForm = popupEditForm.querySelector('.popup__container');
+const popupContainerEditForm = popupEditForm.querySelector('.popup__form');
 const closeEditFormButton = popupEditForm.querySelector('.popup__close-button');
 
 const profileName = page.querySelector('.profile__name');
@@ -17,7 +17,7 @@ const inputProfileDescription = popupEditForm.querySelector('.popup__description
 
 // для формы добавления фото
 const popupAddForm = page.querySelector('.popup_type_add-form');
-const popupContainerAddForm = popupAddForm.querySelector('.popup__container');
+const popupContainerAddForm = popupAddForm.querySelector('.popup__form');
 const closeAddFormButton = popupAddForm.querySelector('.popup__close-button');
 
 const inputPhotoName = popupAddForm.querySelector('.popup__name');
