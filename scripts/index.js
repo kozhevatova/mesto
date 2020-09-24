@@ -57,34 +57,69 @@ const initialCards = [
 ];
 
 // открытие/закрытие попапа
-const popupToggle = (event, popup) => {
-  if (event.target !== event.currentTarget) {
-    return;
-  }
-
+const popupToggle = (popup) => {
   popup.classList.toggle('popup_opened');
   page.classList.toggle('page_overflow-hidden');
 };
 
+// вызов события очистки формы
+const resetForm = (form) => {
+  if (!form.classList.contains('popup__form_type_zoomed-image')) {
+    form.reset();
+  }
+};
+
+// закрытие попапа при нажатии на фон
+const closePopupByClickOnOverlay = (event, popup) => {
+  if (event.target !== event.currentTarget) {
+    return;
+  }
+  resetForm(popup.querySelector('.popup__form'));
+  popupToggle(popup);
+};
+
 // обработчик нажатия на кнопку редактирования профиля
-const editButtonClickHandler = (event, popup) => {
+const editButtonClickHandler = (popup) => {
   if (!popup.classList.contains('popup_opened')) {
     inputProfileName.value = profileName.textContent;
     inputProfileDescription.value = profileDescription.textContent;
   }
 
-  popupToggle(event, popup);
+  popupToggle(popup);
 };
 
 // обработчик нажатия на кнопку добавления фото
-const addButtonClickHandler = (event, popup) => {
+const addButtonClickHandler = (popup) => {
   inputPhotoName.value = '';
   inputPhotoLink.value = '';
 
-  popupToggle(event, popup);
+  popupToggle(popup);
 };
 
-// добавление новой фото
+// добавление лайка
+const addLike = (element) => {
+  element.querySelector('.element__like').addEventListener('click', (event) => {
+    event.target.classList.toggle('element__like_active');
+  });
+};
+
+// удаление фото
+const deletePhoto = (element) => {
+  element.querySelector('.element__delete-button').addEventListener('click', (event) => {
+    event.target.closest('.element').remove();
+  });
+};
+
+// приближение фото
+const zoomPhoto = (elementImage) => {
+  elementImage.addEventListener('click', (event) => {
+    popupImage.src = event.target.src;
+    imageName.textContent = event.target.closest('.element').querySelector('.element__place-name').textContent;
+    popupToggle(popupZoomedImage);
+  });
+};
+
+// создание нового элемента с фото
 const createCard = (name, link) => {
   const element = elementTemplate.cloneNode(true);
   const elementImage = element.querySelector('.element__image');
@@ -92,29 +127,15 @@ const createCard = (name, link) => {
   element.querySelector('.element__place-name').textContent = name;
   elementImage.src = link;
 
-  // добавление лайка
-  element.querySelector('.element__like').addEventListener('click', (event) => {
-    event.target.classList.toggle('element__like_active');
-  });
-
-  // удаление фото
-  element.querySelector('.element__delete-button').addEventListener('click', (event) => {
-    event.target.closest('.element').remove();
-  });
-
-  // приближение фото
-  elementImage.addEventListener('click', (event) => {
-    popupImage.src = event.target.src;
-    imageName.textContent = event.target.closest('.element').querySelector('.element__place-name').textContent;
-    popupToggle(event, popupZoomedImage);
-  });
+  addLike(element);
+  deletePhoto(element);
+  zoomPhoto(elementImage);
 
   return element;
 };
 
 // добавление фотографий на страницу "из коробки"
 const elements = initialCards.map((item) => createCard(item.name, item.link));
-
 elementsContainer.append(...elements);
 
 // обработчик формы редактирования профиля
@@ -124,7 +145,7 @@ const editFormSubmitHandler = (event, popup) => {
   profileName.textContent = inputProfileName.value;
   profileDescription.textContent = inputProfileDescription.value;
 
-  popupToggle(event, popup);
+  popupToggle(popup);
 };
 
 // обработчик формы добавления фото
@@ -136,41 +157,56 @@ const addFormSubmitHandler = (event, popup) => {
     elementsContainer.prepend(newElement);
   }
 
-  popupToggle(event, popup);
+  popupToggle(popup);
 };
 
-// события формы редактирования профиля
-editButton.addEventListener('click', (event) => {
-  editButtonClickHandler(event, popupEditForm);
+// обработчик нажатия на кнопку Esc
+const escButtonClickHandler = (event) => {
+  const openedPopup = document.querySelector('.popup_opened');
+  const form = openedPopup.querySelector('.popup__form');
+  if (event.key === 'Escape' && openedPopup != null) {
+    resetForm(form);
+    popupToggle(openedPopup);
+  }
+};
+
+// событие нажатия на кнопку клавиатуры
+document.addEventListener('keydown', (event) => {
+  escButtonClickHandler(event);
 });
-closeEditFormButton.addEventListener('click', (event) => {
-  popupToggle(event, popupEditForm);
+
+// события формы редактирования профиля
+editButton.addEventListener('click', () => {
+  editButtonClickHandler(popupEditForm);
+});
+closeEditFormButton.addEventListener('click', () => {
+  popupToggle(popupEditForm);
 });
 popupEditForm.addEventListener('click', (event) => {
-  popupToggle(event, popupEditForm);
+  closePopupByClickOnOverlay(event, popupEditForm);
 });
 popupContainerEditForm.addEventListener('submit', (event) => {
   editFormSubmitHandler(event, popupEditForm);
 });
 
 // события формы добавления фотографий
-addButton.addEventListener('click', (event) => {
-  addButtonClickHandler(event, popupAddForm);
+addButton.addEventListener('click', () => {
+  addButtonClickHandler(popupAddForm);
 });
-closeAddFormButton.addEventListener('click', (event) => {
-  popupToggle(event, popupAddForm);
+closeAddFormButton.addEventListener('click', () => {
+  popupToggle(popupAddForm);
 });
 popupAddForm.addEventListener('click', (event) => {
-  popupToggle(event, popupAddForm);
+  closePopupByClickOnOverlay(event, popupAddForm);
 });
 popupContainerAddForm.addEventListener('submit', (event) => {
   addFormSubmitHandler(event, popupAddForm);
 });
 
 // события попапа с приближенной фотографией
-closeButtonZoomedImage.addEventListener('click', (event) => {
-  popupToggle(event, popupZoomedImage);
+closeButtonZoomedImage.addEventListener('click', () => {
+  popupToggle(popupZoomedImage);
 });
 popupZoomedImage.addEventListener('click', (event) => {
-  popupToggle(event, popupZoomedImage);
+  closePopupByClickOnOverlay(event, popupZoomedImage);
 });
