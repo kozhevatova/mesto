@@ -148,7 +148,7 @@ const handleAddFormSubmit = (event, popup) => {
 const handleEscButtonClick = (event) => {
   const openedPopup = document.querySelector('.popup_opened');
   if (event.key === 'Escape' && openedPopup != null) {
-    closePopup(openPopup);
+    closePopup(openedPopup);
   }
 };
 
