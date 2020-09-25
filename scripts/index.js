@@ -29,35 +29,31 @@ const popupImage = popupZoomedImage.querySelector('.popup__image');
 const closeButtonZoomedImage = popupZoomedImage.querySelector('.popup__close-button');
 const imageName = popupZoomedImage.querySelector('.popup__name');
 
-//открыть попап
+// открыть попап
 const openPopup = (popup) => {
   popup.classList.add('popup_opened');
   page.classList.add('page_overflow-hidden');
 
   // событие нажатия на кнопку клавиатуры
-  document.addEventListener('keydown', (event) => {
-    handleEscButtonClick(event);
-  });
+  document.addEventListener('keydown',handleEscButtonClick);
 };
 
-//закрыть попап
+// закрыть попап
 const closePopup = (popup) => {
   popup.classList.remove('popup_opened');
   page.classList.remove('page_overflow-hidden');
 
-  //удаление события нажатия на кнопку клавиатуры
-  document.removeEventListener('keydown', (event) => {
-    handleEscButtonClick(event);
-  });
+  // удаление события нажатия на кнопку клавиатуры
+  document.removeEventListener('keydown', handleEscButtonClick);
 };
 
 // закрытие попапа при нажатии на фон
-const closePopupByClickOnOverlay = (event, popup) => {
+const closePopupByClickOnOverlay = (event) => {
   if (event.target !== event.currentTarget) {
     return;
   }
 
-  closePopup(popup);
+  closePopup(event.target);
 };
 
 // обработчик нажатия на кнопку редактирования профиля
@@ -136,10 +132,8 @@ const handleEditFormSubmit = (event, popup) => {
 const handleAddFormSubmit = (event, popup) => {
   event.preventDefault();
 
-  if (inputPhotoName.value !== '' && inputPhotoLink.value !== '') {
-    const newElement = createCard(inputPhotoName.value, inputPhotoLink.value);
-    elementsContainer.prepend(newElement);
-  }
+  const newElement = createCard(inputPhotoName.value, inputPhotoLink.value);
+  elementsContainer.prepend(newElement);
 
   closePopup(popup);
 };
@@ -160,7 +154,7 @@ closeEditFormButton.addEventListener('click', () => {
   closePopup(popupEditForm);
 });
 popupEditForm.addEventListener('click', (event) => {
-  closePopupByClickOnOverlay(event, popupEditForm);
+  closePopupByClickOnOverlay(event);
 });
 popupContainerEditForm.addEventListener('submit', (event) => {
   handleEditFormSubmit(event, popupEditForm);
@@ -174,7 +168,7 @@ closeAddFormButton.addEventListener('click', () => {
   closePopup(popupAddForm);
 });
 popupAddForm.addEventListener('click', (event) => {
-  closePopupByClickOnOverlay(event, popupAddForm);
+  closePopupByClickOnOverlay(event);
 });
 popupContainerAddForm.addEventListener('submit', (event) => {
   handleAddFormSubmit(event, popupAddForm);
@@ -185,5 +179,5 @@ closeButtonZoomedImage.addEventListener('click', () => {
   closePopup(popupZoomedImage);
 });
 popupZoomedImage.addEventListener('click', (event) => {
-  closePopupByClickOnOverlay(event, popupZoomedImage);
+  closePopupByClickOnOverlay(event);
 });
