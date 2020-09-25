@@ -14,6 +14,18 @@ const hideInputError = (form, input, inputErrorClass, errorClass) => {
   error.classList.remove(errorClass);
 };
 
+// сделать кнопку активной
+const enableButton = (button, inactiveButtonClass) => {
+  button.classList.remove(inactiveButtonClass);
+  button.removeAttribute('disabled');
+};
+
+// сделать кнопку неактивной
+const disableButton = (button, inactiveButtonClass) => {
+  button.classList.add(inactiveButtonClass);
+  button.setAttribute('disabled', 'true');
+};
+
 // проверка валидности ввода
 const checkInputValidity = (form, input, inputErrorClass, errorClass) => {
   if (!input.validity.valid) {
@@ -29,9 +41,9 @@ const hasInvalidInput = (inputList) => Array.from(inputList).some((input) => !in
 // изменение активности submit кнопки
 const toggleButtonState = (inputList, button, inactiveButtonClass) => {
   if (hasInvalidInput(inputList)) {
-    button.classList.add(inactiveButtonClass);
+    disableButton(button, inactiveButtonClass);
   } else {
-    button.classList.remove(inactiveButtonClass);
+    enableButton(button, inactiveButtonClass);
   }
 };
 
@@ -51,32 +63,25 @@ const enableValidation = (data) => {
   });
 };
 
-enableValidation({
-  formSelector: '.popup__form',
-  inputSelector: '.popup__input',
-  submitButtonSelector: '.popup__button',
-  inactiveButtonClass: 'popup__button_disabled',
-  inputErrorClass: 'popup__input_type_error',
-  errorClass: 'popup__input-error_active',
-});
-
 // удаление ошибки ввода при закрытии формы
-const handleReset = (popup) => {
-  const errors = Array.from(popup.querySelectorAll('.popup__input-error'));
+const handleReset = (popup, data) => {
+  const errors = Array.from(popup.querySelectorAll(data.errorSelector));
   errors.forEach((error) => {
     error.textContent = '';
-    error.classList.remove('popup__input-error_active');
+    error.classList.remove(data.errorClass);
   });
-  const inputs = Array.from(popup.querySelectorAll('.popup__input'));
+  const inputs = Array.from(popup.querySelectorAll(data.inputSelector));
   inputs.forEach((input) => {
-    input.classList.remove('popup__input_type_error');
+    input.classList.remove(data.inputErrorClass);
   });
 };
 
+enableValidation(validationConfig);
+
 popupAddForm.addEventListener('reset', () => {
-  handleReset(popupAddForm);
+  handleReset(popupAddForm, validationConfig);
 });
 
 popupEditForm.addEventListener('reset', () => {
-  handleReset(popupEditForm);
+  handleReset(popupEditForm, validationConfig);
 });

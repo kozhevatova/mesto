@@ -29,44 +29,26 @@ const popupImage = popupZoomedImage.querySelector('.popup__image');
 const closeButtonZoomedImage = popupZoomedImage.querySelector('.popup__close-button');
 const imageName = popupZoomedImage.querySelector('.popup__name');
 
-const initialCards = [
-  {
-    name: 'Карачаево-Черкессия',
-    link: './images/karachaevsc.jpg',
-  },
-  {
-    name: 'Гора Эльбрус',
-    link: './images/elbrus.jpg',
-  },
-  {
-    name: 'Домбай',
-    link: './images/dombay.jpg',
-  },
-  {
-    name: 'Камчатка',
-    link: './images/kamchatka-alex-glebov.jpg',
-  },
-  {
-    name: 'Республика Коми',
-    link: './images/komi-vladimir-fedotov.jpg',
-  },
-  {
-    name: 'Байкал',
-    link: './images/baikal-markus-winkler.jpg',
-  },
-];
+//открыть попап
+const openPopup = (popup) => {
+  popup.classList.add('popup_opened');
+  page.classList.add('page_overflow-hidden');
 
-// открытие/закрытие попапа
-const popupToggle = (popup) => {
-  popup.classList.toggle('popup_opened');
-  page.classList.toggle('page_overflow-hidden');
+  // событие нажатия на кнопку клавиатуры
+  document.addEventListener('keydown', (event) => {
+    handleEscButtonClick(event);
+  });
 };
 
-// вызов события очистки формы
-const resetForm = (form) => {
-  if (!form.classList.contains('popup__form_type_zoomed-image')) {
-    form.reset();
-  }
+//закрыть попап
+const closePopup = (popup) => {
+  popup.classList.remove('popup_opened');
+  page.classList.remove('page_overflow-hidden');
+
+  //удаление события нажатия на кнопку клавиатуры
+  document.removeEventListener('keydown', (event) => {
+    handleEscButtonClick(event);
+  });
 };
 
 // закрытие попапа при нажатии на фон
@@ -74,26 +56,27 @@ const closePopupByClickOnOverlay = (event, popup) => {
   if (event.target !== event.currentTarget) {
     return;
   }
-  resetForm(popup.querySelector('.popup__form'));
-  popupToggle(popup);
+
+  closePopup(popup);
 };
 
 // обработчик нажатия на кнопку редактирования профиля
-const editButtonClickHandler = (popup) => {
-  if (!popup.classList.contains('popup_opened')) {
-    inputProfileName.value = profileName.textContent;
-    inputProfileDescription.value = profileDescription.textContent;
-  }
+const handleEditButtonClick = (popup) => {
+  inputProfileName.value = profileName.textContent;
+  inputProfileDescription.value = profileDescription.textContent;
 
-  popupToggle(popup);
+  openPopup(popup);
 };
 
 // обработчик нажатия на кнопку добавления фото
-const addButtonClickHandler = (popup) => {
+const handleAddButtonClick = (popup) => {
   inputPhotoName.value = '';
   inputPhotoLink.value = '';
 
-  popupToggle(popup);
+  const button = popup.querySelector(validationConfig.submitButtonSelector);
+  disableButton(button, validationConfig.inactiveButtonClass);
+
+  openPopup(popup);
 };
 
 // добавление лайка
@@ -115,7 +98,8 @@ const zoomPhoto = (elementImage) => {
   elementImage.addEventListener('click', (event) => {
     popupImage.src = event.target.src;
     imageName.textContent = event.target.closest('.element').querySelector('.element__place-name').textContent;
-    popupToggle(popupZoomedImage);
+
+    openPopup(popupZoomedImage);
   });
 };
 
@@ -139,17 +123,17 @@ const elements = initialCards.map((item) => createCard(item.name, item.link));
 elementsContainer.append(...elements);
 
 // обработчик формы редактирования профиля
-const editFormSubmitHandler = (event, popup) => {
+const handleEditFormSubmit = (event, popup) => {
   event.preventDefault();
 
   profileName.textContent = inputProfileName.value;
   profileDescription.textContent = inputProfileDescription.value;
 
-  popupToggle(popup);
+  closePopup(popup);
 };
 
 // обработчик формы добавления фото
-const addFormSubmitHandler = (event, popup) => {
+const handleAddFormSubmit = (event, popup) => {
   event.preventDefault();
 
   if (inputPhotoName.value !== '' && inputPhotoLink.value !== '') {
@@ -157,55 +141,48 @@ const addFormSubmitHandler = (event, popup) => {
     elementsContainer.prepend(newElement);
   }
 
-  popupToggle(popup);
+  closePopup(popup);
 };
 
 // обработчик нажатия на кнопку Esc
-const escButtonClickHandler = (event) => {
+const handleEscButtonClick = (event) => {
   const openedPopup = document.querySelector('.popup_opened');
-  const form = openedPopup.querySelector('.popup__form');
   if (event.key === 'Escape' && openedPopup != null) {
-    resetForm(form);
-    popupToggle(openedPopup);
+    closePopup(openPopup);
   }
 };
 
-// событие нажатия на кнопку клавиатуры
-document.addEventListener('keydown', (event) => {
-  escButtonClickHandler(event);
-});
-
 // события формы редактирования профиля
 editButton.addEventListener('click', () => {
-  editButtonClickHandler(popupEditForm);
+  handleEditButtonClick(popupEditForm);
 });
 closeEditFormButton.addEventListener('click', () => {
-  popupToggle(popupEditForm);
+  closePopup(popupEditForm);
 });
 popupEditForm.addEventListener('click', (event) => {
   closePopupByClickOnOverlay(event, popupEditForm);
 });
 popupContainerEditForm.addEventListener('submit', (event) => {
-  editFormSubmitHandler(event, popupEditForm);
+  handleEditFormSubmit(event, popupEditForm);
 });
 
 // события формы добавления фотографий
 addButton.addEventListener('click', () => {
-  addButtonClickHandler(popupAddForm);
+  handleAddButtonClick(popupAddForm);
 });
 closeAddFormButton.addEventListener('click', () => {
-  popupToggle(popupAddForm);
+  closePopup(popupAddForm);
 });
 popupAddForm.addEventListener('click', (event) => {
   closePopupByClickOnOverlay(event, popupAddForm);
 });
 popupContainerAddForm.addEventListener('submit', (event) => {
-  addFormSubmitHandler(event, popupAddForm);
+  handleAddFormSubmit(event, popupAddForm);
 });
 
 // события попапа с приближенной фотографией
 closeButtonZoomedImage.addEventListener('click', () => {
-  popupToggle(popupZoomedImage);
+  closePopup(popupZoomedImage);
 });
 popupZoomedImage.addEventListener('click', (event) => {
   closePopupByClickOnOverlay(event, popupZoomedImage);
