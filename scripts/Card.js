@@ -49,7 +49,7 @@ export default class Card {
   }
 
   // удаление фото
-  _handleDeleteButtonClicked(event) {
+  _handleDeleteButtonClicked() {
     this._element.remove();
   }
 
