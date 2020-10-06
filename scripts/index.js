@@ -37,7 +37,7 @@ const openPopup = (popup) => {
   page.classList.add('page_overflow-hidden');
 
   // событие нажатия на кнопку клавиатуры
-  document.addEventListener('keydown',handleEscButtonClick);
+  document.addEventListener('keydown', handleEscButtonClick);
 };
 
 // закрыть попап
@@ -58,13 +58,13 @@ const closePopupByClickOnOverlay = (event) => {
   closePopup(event.target);
 };
 
-//включить валидацию формы
+// включить валидацию формы
 const validateForm = (popup) => {
   const formValidator = new FormValidator(validationConfig, popup.querySelector('.popup__form'));
   formValidator.enableValidation();
 };
 
-//сделать кнопку неактивной
+// сделать кнопку неактивной
 const disableSubmitButton = (popup) => {
   const button = popup.querySelector(validationConfig.submitButtonSelector);
   button.classList.add(validationConfig.inactiveButtonClass);
@@ -110,7 +110,7 @@ const handleEditFormSubmit = (event, popup) => {
 const handleAddFormSubmit = (event, popup) => {
   event.preventDefault();
 
-  const newElement = new Card({name: inputPhotoName.value, link: inputPhotoLink.value}, '.element-template');
+  const newElement = new Card({ name: inputPhotoName.value, link: inputPhotoLink.value }, '.element-template');
   elementsContainer.prepend(newElement.generateCard());
 
   closePopup(popup);
@@ -159,4 +159,3 @@ closeButtonZoomedImage.addEventListener('click', () => {
 popupZoomedImage.addEventListener('click', (event) => {
   closePopupByClickOnOverlay(event);
 });
-

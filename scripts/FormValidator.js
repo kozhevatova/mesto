@@ -61,21 +61,21 @@ export default class FormValidator {
     }
   }
 
-  //удаление ошибки ввода при закрытии формы
+  // удаление ошибки ввода при закрытии формы
   _handleReset(popup) {
     const errors = Array.from(popup.querySelectorAll(this._errorSelector));
     const inputs = Array.from(popup.querySelectorAll(this._inputSelector));
-    
+
     errors.forEach((error) => {
       error.textContent = '';
       error.classList.remove(this._errorClass);
     });
-    
+
     inputs.forEach((input) => {
       input.classList.remove(this._inputErrorClass);
     });
   }
- 
+
   _setEventListenersForReset() {
     const popupAddForm = document.querySelector('.popup_type_add-form');
     const popupEditForm = document.querySelector('.popup_type_edit-form');
@@ -102,5 +102,4 @@ export default class FormValidator {
 
     this._setEventListenersForReset();
   }
-
 }
