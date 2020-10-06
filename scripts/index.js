@@ -1,8 +1,12 @@
+import Card from './Card.js';
+import FormValidator from './FormValidator.js';
+import { initialCards } from './initialCards.js';
+import { validationConfig } from './validationConfig.js';
+
 const page = document.querySelector('.page');
 const editButton = page.querySelector('.profile__edit-button');
 const addButton = page.querySelector('.profile__add-button');
 const elementsContainer = page.querySelector('.elements');
-const elementTemplate = page.querySelector('#element-template').content;
 
 // для формы редактирования профиля
 const popupEditForm = page.querySelector('.popup_type_edit-form');
@@ -23,11 +27,9 @@ const closeAddFormButton = popupAddForm.querySelector('.popup__close-button');
 const inputPhotoName = popupAddForm.querySelector('.popup__name');
 const inputPhotoLink = popupAddForm.querySelector('.popup__description');
 
-// для приближения фото
+// для попапа с приближенным фото
 const popupZoomedImage = page.querySelector('.popup_type_zoomed-image');
-const popupImage = popupZoomedImage.querySelector('.popup__image');
 const closeButtonZoomedImage = popupZoomedImage.querySelector('.popup__close-button');
-const imageName = popupZoomedImage.querySelector('.popup__name');
 
 // открыть попап
 const openPopup = (popup) => {
@@ -56,11 +58,24 @@ const closePopupByClickOnOverlay = (event) => {
   closePopup(event.target);
 };
 
+//включить валидацию формы
+const validateForm = (popup) => {
+  const formValidator = new FormValidator(validationConfig, popup.querySelector('.popup__form'));
+  formValidator.enableValidation();
+};
+
+//сделать кнопку неактивной
+const disableSubmitButton = (popup) => {
+  const button = popup.querySelector(validationConfig.submitButtonSelector);
+  button.classList.add(validationConfig.inactiveButtonClass);
+  button.setAttribute('disabled', 'true');
+};
+
 // обработчик нажатия на кнопку редактирования профиля
 const handleEditButtonClick = (popup) => {
   inputProfileName.value = profileName.textContent;
   inputProfileDescription.value = profileDescription.textContent;
-
+  validateForm(popup);
   openPopup(popup);
 };
 
@@ -69,53 +84,16 @@ const handleAddButtonClick = (popup) => {
   inputPhotoName.value = '';
   inputPhotoLink.value = '';
 
-  const button = popup.querySelector(validationConfig.submitButtonSelector);
-  disableButton(button, validationConfig.inactiveButtonClass);
-
+  disableSubmitButton(popup);
+  validateForm(popup);
   openPopup(popup);
 };
 
-// добавление лайка
-const addLike = (element) => {
-  element.querySelector('.element__like').addEventListener('click', (event) => {
-    event.target.classList.toggle('element__like_active');
-  });
-};
-
-// удаление фото
-const deletePhoto = (element) => {
-  element.querySelector('.element__delete-button').addEventListener('click', (event) => {
-    event.target.closest('.element').remove();
-  });
-};
-
-// приближение фото
-const zoomPhoto = (elementImage) => {
-  elementImage.addEventListener('click', (event) => {
-    popupImage.src = event.target.src;
-    imageName.textContent = event.target.closest('.element').querySelector('.element__place-name').textContent;
-
-    openPopup(popupZoomedImage);
-  });
-};
-
-// создание нового элемента с фото
-const createCard = (name, link) => {
-  const element = elementTemplate.cloneNode(true);
-  const elementImage = element.querySelector('.element__image');
-
-  element.querySelector('.element__place-name').textContent = name;
-  elementImage.src = link;
-
-  addLike(element);
-  deletePhoto(element);
-  zoomPhoto(elementImage);
-
-  return element;
-};
-
 // добавление фотографий на страницу "из коробки"
-const elements = initialCards.map((item) => createCard(item.name, item.link));
+const elements = initialCards.map((item) => {
+  const card = new Card(item, '.element-template');
+  return card.generateCard();
+});
 elementsContainer.append(...elements);
 
 // обработчик формы редактирования профиля
@@ -132,8 +110,8 @@ const handleEditFormSubmit = (event, popup) => {
 const handleAddFormSubmit = (event, popup) => {
   event.preventDefault();
 
-  const newElement = createCard(inputPhotoName.value, inputPhotoLink.value);
-  elementsContainer.prepend(newElement);
+  const newElement = new Card({name: inputPhotoName.value, link: inputPhotoLink.value}, '.element-template');
+  elementsContainer.prepend(newElement.generateCard());
 
   closePopup(popup);
 };
@@ -181,3 +159,4 @@ closeButtonZoomedImage.addEventListener('click', () => {
 popupZoomedImage.addEventListener('click', (event) => {
   closePopupByClickOnOverlay(event);
 });
+
