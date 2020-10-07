@@ -31,6 +31,12 @@ const inputPhotoLink = popupAddForm.querySelector('.popup__description');
 const popupZoomedImage = page.querySelector('.popup_type_zoomed-image');
 const closeButtonZoomedImage = popupZoomedImage.querySelector('.popup__close-button');
 
+
+const popups = Array.from(page.querySelectorAll('.popup'));
+popups.forEach((popup) => {
+  popup.classList.add('popup_effect_transition');
+});
+
 // открыть попап
 const openPopup = (popup) => {
   popup.classList.add('popup_opened');
@@ -62,20 +68,16 @@ const closePopupByClickOnOverlay = (event) => {
 const validateForm = (popup) => {
   const formValidator = new FormValidator(validationConfig, popup.querySelector('.popup__form'));
   formValidator.enableValidation();
+  return formValidator;
 };
 
-// сделать кнопку неактивной
-const disableSubmitButton = (popup) => {
-  const button = popup.querySelector(validationConfig.submitButtonSelector);
-  button.classList.add(validationConfig.inactiveButtonClass);
-  button.setAttribute('disabled', 'true');
-};
+const addFormValidator = validateForm(popupAddForm);
+const editFormValidator = validateForm(popupEditForm);
 
 // обработчик нажатия на кнопку редактирования профиля
 const handleEditButtonClick = (popup) => {
   inputProfileName.value = profileName.textContent;
   inputProfileDescription.value = profileDescription.textContent;
-  validateForm(popup);
   openPopup(popup);
 };
 
@@ -84,8 +86,7 @@ const handleAddButtonClick = (popup) => {
   inputPhotoName.value = '';
   inputPhotoLink.value = '';
 
-  disableSubmitButton(popup);
-  validateForm(popup);
+  addFormValidator.toggleButtonState();
   openPopup(popup);
 };
 

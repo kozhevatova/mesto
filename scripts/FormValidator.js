@@ -1,6 +1,5 @@
 export default class FormValidator {
   constructor(data, formElement) {
-    this._formSelector = data.formSelector;
     this._inputSelector = data.inputSelector;
     this._submitButtonSelector = data.submitButtonSelector;
     this._inactiveButtonClass = data.inactiveButtonClass;
@@ -8,6 +7,8 @@ export default class FormValidator {
     this._errorClass = data.errorClass;
     this._errorSelector = data.errorSelector;
     this._formElement = formElement;
+    this._button = formElement.querySelector(data.submitButtonSelector);
+    this._inputList = Array.from(formElement.querySelectorAll(data.inputSelector));
   }
 
   // отображение ошибки ввода
@@ -36,67 +37,50 @@ export default class FormValidator {
   }
 
   // сделать кнопку активной
-  _enableButton(button) {
-    button.classList.remove(this._inactiveButtonClass);
-    button.removeAttribute('disabled');
+  _enableButton() {
+    this._button.classList.remove(this._inactiveButtonClass);
+    this._button.removeAttribute('disabled');
   }
 
   // сделать кнопку неактивной
-  _disableButton(button) {
-    button.classList.add(this._inactiveButtonClass);
-    button.setAttribute('disabled', 'true');
+  _disableButton() {
+    this._button.classList.add(this._inactiveButtonClass);
+    this._button.setAttribute('disabled', 'true');
   }
 
   // проверка наличия хотя бы одного неверного ввода
-  _hasInvalidInput(inputList) {
-    return Array.from(inputList).some((input) => !input.validity.valid);
+  _hasInvalidInput() {
+    return this._inputList.some((input) => !input.validity.valid);
   }
 
   // изменение активности submit кнопки
-  _toggleButtonState(inputList, button) {
-    if (this._hasInvalidInput(inputList)) {
-      this._disableButton(button, this._inactiveButtonClass);
+  toggleButtonState() {
+    if (this._hasInvalidInput()) {
+      this._disableButton();
     } else {
-      this._enableButton(button, this._inactiveButtonClass);
+      this._enableButton();
     }
   }
 
   // удаление ошибки ввода при закрытии формы
-  _handleReset(popup) {
-    const errors = Array.from(popup.querySelectorAll(this._errorSelector));
-    const inputs = Array.from(popup.querySelectorAll(this._inputSelector));
-
-    errors.forEach((error) => {
-      error.textContent = '';
-      error.classList.remove(this._errorClass);
-    });
-
-    inputs.forEach((input) => {
-      input.classList.remove(this._inputErrorClass);
+  _handleReset() {
+    this._inputList.forEach((input) => {
+      this._hideInputError(input);
     });
   }
 
   _setEventListenersForReset() {
-    const popupAddForm = document.querySelector('.popup_type_add-form');
-    const popupEditForm = document.querySelector('.popup_type_edit-form');
-
-    popupAddForm.addEventListener('reset', () => {
-      this._handleReset(popupAddForm);
-    });
-    popupEditForm.addEventListener('reset', () => {
-      this._handleReset(popupEditForm);
+    this._formElement.addEventListener('reset', () => {
+      this._handleReset();
     });
   }
 
   // настройка валидации
   enableValidation() {
-    const inputList = Array.from(this._formElement.querySelectorAll(this._inputSelector));
-    const button = this._formElement.querySelector(this._submitButtonSelector);
-
-    inputList.forEach((input) => {
+    this._inputList.forEach((input) => {
       input.addEventListener('input', () => {
         this._checkInputValidity(input);
-        this._toggleButtonState(inputList, button);
+        this.toggleButtonState();
       });
     });
 
