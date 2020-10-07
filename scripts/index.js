@@ -31,12 +31,6 @@ const inputPhotoLink = popupAddForm.querySelector('.popup__description');
 const popupZoomedImage = page.querySelector('.popup_type_zoomed-image');
 const closeButtonZoomedImage = popupZoomedImage.querySelector('.popup__close-button');
 
-
-const popups = Array.from(page.querySelectorAll('.popup'));
-popups.forEach((popup) => {
-  popup.classList.add('popup_effect_transition');
-});
-
 // открыть попап
 const openPopup = (popup) => {
   popup.classList.add('popup_opened');

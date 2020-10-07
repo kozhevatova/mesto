@@ -31,7 +31,6 @@
 @import url('../blocks/footer/__copyright/footer__copyright.css');
 
 @import url('../blocks/popup/popup.css');
-@import url('../blocks/popup/_effect/popup_effect_transition.css');
 @import url('../blocks/popup/_type/popup_type_add-form.css');
 @import url('../blocks/popup/_type/popup_type_edit-form.css');
 @import url('../blocks/popup/_type/popup_type_zoomed-image.css');
