@@ -5,25 +5,25 @@ export default class Card {
     this._cardSelector = cardSelector;
   }
 
-  //добавление обработчиков событий
+  // добавление обработчиков событий
   _setEventListeners() {
-    //лайк
+    // лайк
     this._element.querySelector('.element__like').addEventListener('click', (event) => {
       this._handleLikeClicked(event);
     });
 
-    //удаление фото
+    // удаление фото
     this._element.querySelector('.element__delete-button').addEventListener('click', (event) => {
       this._handleDeleteButtonClicked(event);
     });
 
-    //зум фото
+    // зум фото
     this._element.querySelector('.element__image').addEventListener('click', () => {
       this._handleOpenPopupImage();
     });
   }
 
-  //закрытие по нажатию на Esc
+  // закрытие по нажатию на Esc
   _handleEscButtonClick(event) {
     const openedPopup = document.querySelector('.popup_opened');
     if (event.key === 'Escape' && openedPopup != null) {
@@ -34,14 +34,13 @@ export default class Card {
     }
   }
 
-  //открытие зум фото
+  // открытие зум фото
   _handleOpenPopupImage() {
     const popupZoomedImage = document.querySelector('.popup_type_zoomed-image');
     const popupImage = popupZoomedImage.querySelector('.popup__image');
 
     popupImage.src = this._element.querySelector('.element__image').src;
-    popupZoomedImage.querySelector('.popup__name').textContent =
-      this._element.querySelector('.element__place-name').textContent;
+    popupZoomedImage.querySelector('.popup__name').textContent = this._element.querySelector('.element__place-name').textContent;
     popupZoomedImage.classList.add('popup_opened');
     document.querySelector('.page').classList.add('page_overflow-hidden');
 
@@ -49,20 +48,19 @@ export default class Card {
     document.addEventListener('keydown', this._handleEscButtonClick);
   }
 
-  //удаление фото
-  _handleDeleteButtonClicked(event) {
+  // удаление фото
+  _handleDeleteButtonClicked() {
     this._element.remove();
   }
 
-  //лайк фото
+  // лайк фото
   _handleLikeClicked() {
     this._element.querySelector('.element__like').classList.toggle('element__like_active');
   }
 
-  
   _getTemplate() {
-    return document.querySelector(this._cardSelector).content.
-      querySelector('.element').cloneNode(true);
+    return document.querySelector(this._cardSelector).content
+      .querySelector('.element').cloneNode(true);
   }
 
   generateCard() {
