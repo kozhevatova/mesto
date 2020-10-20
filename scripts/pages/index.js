@@ -1,7 +1,9 @@
-import Card from './Card.js';
-import FormValidator from './FormValidator.js';
-import { initialCards } from './initialCards.js';
-import { validationConfig } from './validationConfig.js';
+import Card from '../components/Card.js';
+import FormValidator from '../components/FormValidator.js';
+import { initialCards } from '../utils/initialCards.js';
+import PopupWithImage from '../components/PopupWithImage.js';
+import { validationConfig } from '../utils/validationConfig.js';
+import Section from '../components/Section.js';
 
 const page = document.querySelector('.page');
 const editButton = page.querySelector('.profile__edit-button');
@@ -50,13 +52,13 @@ const closePopup = (popup) => {
 };
 
 // закрытие попапа при нажатии на фон
-const closePopupByClickOnOverlay = (event) => {
-  if (event.target !== event.currentTarget) {
-    return;
-  }
+// const closePopupByClickOnOverlay = (event) => {
+//   if (event.target !== event.currentTarget) {
+//     return;
+//   }
 
-  closePopup(event.target);
-};
+//   closePopup(event.target);
+// };
 
 // включить валидацию формы
 const validateForm = (popup) => {
@@ -85,11 +87,26 @@ const handleAddButtonClick = (popup) => {
 };
 
 // добавление фотографий на страницу "из коробки"
-const elements = initialCards.map((item) => {
-  const card = new Card(item, '.element-template');
-  return card.generateCard();
-});
-elementsContainer.append(...elements);
+// const elements = initialCards.map((item) => {
+//   const card = new Card(item, '.element-template', () => {
+//     const zoomedImage = new PopupWithImage('.popup_type_zoomed-image', item);
+//     zoomedImage.open();
+//   });
+//   return card.generateCard();
+// });
+// elementsContainer.append(...elements);
+
+//добавление фотографий на страницу "из коробки"
+const initialCardList = new Section({items: initialCards, renderer: (item) => {
+  const card = new Card(item, '.element-template', () => {
+    const zoomedImage = new PopupWithImage('.popup_type_zoomed-image', item);
+    zoomedImage.open();
+  });
+  const cardElement = card.generateCard();
+  initialCardList.addItem(cardElement);
+}}, '.elements');
+
+initialCardList.renderItems();
 
 // обработчик формы редактирования профиля
 const handleEditFormSubmit = (event, popup) => {
@@ -105,7 +122,11 @@ const handleEditFormSubmit = (event, popup) => {
 const handleAddFormSubmit = (event, popup) => {
   event.preventDefault();
 
-  const newElement = new Card({ name: inputPhotoName.value, link: inputPhotoLink.value }, '.element-template');
+  const newElement = new Card({ name: inputPhotoName.value, link: inputPhotoLink.value },
+    '.element-template', () => {
+      const zoomedImage = new PopupWithImage('.popup_type_zoomed-image', { name: inputPhotoName.value, link: inputPhotoLink.value });
+      zoomedImage.open();
+    });
   elementsContainer.prepend(newElement.generateCard());
 
   closePopup(popup);
@@ -148,9 +169,9 @@ popupContainerAddForm.addEventListener('submit', (event) => {
 });
 
 // события попапа с приближенной фотографией
-closeButtonZoomedImage.addEventListener('click', () => {
-  closePopup(popupZoomedImage);
-});
-popupZoomedImage.addEventListener('click', (event) => {
-  closePopupByClickOnOverlay(event);
-});
+// closeButtonZoomedImage.addEventListener('click', () => {
+//   closePopup(popupZoomedImage);
+// });
+// popupZoomedImage.addEventListener('click', (event) => {
+//   closePopupByClickOnOverlay(event);
+// });
