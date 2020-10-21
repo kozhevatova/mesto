@@ -1,5 +1,5 @@
 export default class Popup {
-  constructor(popupSelector) {
+  constructor({popupSelector}) {
     this._popup = document.querySelector(popupSelector);
   }
 
@@ -11,13 +11,10 @@ export default class Popup {
     document.addEventListener('keydown', (event) => {
       this._handleEscClose(event);
     });
-
-    this.setEventListeners();
   }
 
   close() {
     this._popup.classList.remove('popup_opened');
-    // this._page.classList.remove('page_overflow-hidden');
 
     // событие нажатия на кнопку клавиатуры
     document.removeEventListener('keydown', (event) => {
@@ -46,6 +43,6 @@ export default class Popup {
 
     this._popup.addEventListener('click', (event) => {
       this._closePopupByClickOnOverlay(event);
-    })
+    });
   }
 }

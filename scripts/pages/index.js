@@ -4,174 +4,92 @@ import { initialCards } from '../utils/initialCards.js';
 import PopupWithImage from '../components/PopupWithImage.js';
 import { validationConfig } from '../utils/validationConfig.js';
 import Section from '../components/Section.js';
+import PopupWithForm from '../components/PopupWithForm.js';
+import UserInfo from '../utils/UserInfo.js';
+import {
+  editButton, addButton, inputProfileName, inputProfileDescription
+} from '../utils/constants.js'
 
-const page = document.querySelector('.page');
-const editButton = page.querySelector('.profile__edit-button');
-const addButton = page.querySelector('.profile__add-button');
-const elementsContainer = page.querySelector('.elements');
+const elements = initialCards.slice();
+const userInfo = new UserInfo({
+  nameSelector: '.profile__name',
+  infoSelector: '.profile__subtitle'
+});
 
-// для формы редактирования профиля
-const popupEditForm = page.querySelector('.popup_type_edit-form');
-const popupContainerEditForm = popupEditForm.querySelector('.popup__form');
-const closeEditFormButton = popupEditForm.querySelector('.popup__close-button');
-
-const profileName = page.querySelector('.profile__name');
-const profileDescription = page.querySelector('.profile__subtitle');
-
-const inputProfileName = popupEditForm.querySelector('.popup__name');
-const inputProfileDescription = popupEditForm.querySelector('.popup__description');
-
-// для формы добавления фото
-const popupAddForm = page.querySelector('.popup_type_add-form');
-const popupContainerAddForm = popupAddForm.querySelector('.popup__form');
-const closeAddFormButton = popupAddForm.querySelector('.popup__close-button');
-
-const inputPhotoName = popupAddForm.querySelector('.popup__name');
-const inputPhotoLink = popupAddForm.querySelector('.popup__description');
-
-// для попапа с приближенным фото
-const popupZoomedImage = page.querySelector('.popup_type_zoomed-image');
-const closeButtonZoomedImage = popupZoomedImage.querySelector('.popup__close-button');
-
-// открыть попап
-const openPopup = (popup) => {
-  popup.classList.add('popup_opened');
-  page.classList.add('page_overflow-hidden');
-
-  // событие нажатия на кнопку клавиатуры
-  document.addEventListener('keydown', handleEscButtonClick);
+const handleCardDelete = (item) => {
+  elements.splice(initialCards.indexOf(item), 1);
 };
 
-// закрыть попап
-const closePopup = (popup) => {
-  popup.classList.remove('popup_opened');
-  page.classList.remove('page_overflow-hidden');
+//добавление фотографий на страницу "из коробки"
+const cardList = new Section({
+  items: elements, renderer: (item) => {
+    const card = new Card(item, '.element-template', () => {
+      const zoomedImage = new PopupWithImage({
+        popupSelector: '.popup_type_zoomed-image',
+        image: item
+      });
+      zoomedImage.setEventListeners();
+      zoomedImage.open();
+    }, handleCardDelete);
 
-  // удаление события нажатия на кнопку клавиатуры
-  document.removeEventListener('keydown', handleEscButtonClick);
-};
+    const cardElement = card.generateCard();
+    cardList.addItem(cardElement);
+  }
+}, '.elements');
 
-// закрытие попапа при нажатии на фон
-// const closePopupByClickOnOverlay = (event) => {
-//   if (event.target !== event.currentTarget) {
-//     return;
-//   }
+cardList.renderItems();
 
-//   closePopup(event.target);
-// };
+//попап с формой редактирования профиля
+const editFormPopup = new PopupWithForm({
+  popupSelector: '.popup_type_edit-form', handleFormSubmit: (event, formValues) => {
+    event.preventDefault();
+    userInfo.setUserInfo(formValues.popupName, formValues.popupDescription);
+    editFormPopup.close();
+  }
+});
+
+//попап с формой добавления фото
+const addFormPopup = new PopupWithForm({
+  popupSelector: '.popup_type_add-form', handleFormSubmit: (event, formValues) => {
+    event.preventDefault();
+
+    elements.push({ name: formValues.popupName, link: formValues.popupDescription });
+    cardList.renderItems();
+
+    addFormPopup.close();
+  }
+});
 
 // включить валидацию формы
 const validateForm = (popup) => {
-  const formValidator = new FormValidator(validationConfig, popup.querySelector('.popup__form'));
+  const formValidator = new FormValidator(validationConfig, popup.form);
   formValidator.enableValidation();
   return formValidator;
 };
 
-const addFormValidator = validateForm(popupAddForm);
-const editFormValidator = validateForm(popupEditForm);
+const addFormValidator = validateForm(addFormPopup);
+const editFormValidator = validateForm(editFormPopup);
+
+editFormPopup.setEventListeners();
+addFormPopup.setEventListeners();
 
 // обработчик нажатия на кнопку редактирования профиля
-const handleEditButtonClick = (popup) => {
-  inputProfileName.value = profileName.textContent;
-  inputProfileDescription.value = profileDescription.textContent;
-  openPopup(popup);
+const handleEditButtonClick = () => {
+  editFormValidator.toggleButtonState();
+
+  const profileInfo = userInfo.getUserInfo();
+  inputProfileName.value = profileInfo.name;
+  inputProfileDescription.value = profileInfo.info;
+
+  editFormPopup.open();
 };
 
 // обработчик нажатия на кнопку добавления фото
-const handleAddButtonClick = (popup) => {
-  inputPhotoName.value = '';
-  inputPhotoLink.value = '';
-
+const handleAddButtonClick = () => {
   addFormValidator.toggleButtonState();
-  openPopup(popup);
+  addFormPopup.open();
 };
 
-// добавление фотографий на страницу "из коробки"
-// const elements = initialCards.map((item) => {
-//   const card = new Card(item, '.element-template', () => {
-//     const zoomedImage = new PopupWithImage('.popup_type_zoomed-image', item);
-//     zoomedImage.open();
-//   });
-//   return card.generateCard();
-// });
-// elementsContainer.append(...elements);
+editButton.addEventListener('click', handleEditButtonClick);
 
-//добавление фотографий на страницу "из коробки"
-const initialCardList = new Section({items: initialCards, renderer: (item) => {
-  const card = new Card(item, '.element-template', () => {
-    const zoomedImage = new PopupWithImage('.popup_type_zoomed-image', item);
-    zoomedImage.open();
-  });
-  const cardElement = card.generateCard();
-  initialCardList.addItem(cardElement);
-}}, '.elements');
-
-initialCardList.renderItems();
-
-// обработчик формы редактирования профиля
-const handleEditFormSubmit = (event, popup) => {
-  event.preventDefault();
-
-  profileName.textContent = inputProfileName.value;
-  profileDescription.textContent = inputProfileDescription.value;
-
-  closePopup(popup);
-};
-
-// обработчик формы добавления фото
-const handleAddFormSubmit = (event, popup) => {
-  event.preventDefault();
-
-  const newElement = new Card({ name: inputPhotoName.value, link: inputPhotoLink.value },
-    '.element-template', () => {
-      const zoomedImage = new PopupWithImage('.popup_type_zoomed-image', { name: inputPhotoName.value, link: inputPhotoLink.value });
-      zoomedImage.open();
-    });
-  elementsContainer.prepend(newElement.generateCard());
-
-  closePopup(popup);
-};
-
-// обработчик нажатия на кнопку Esc
-const handleEscButtonClick = (event) => {
-  const openedPopup = document.querySelector('.popup_opened');
-  if (event.key === 'Escape' && openedPopup != null) {
-    closePopup(openedPopup);
-  }
-};
-
-// события формы редактирования профиля
-editButton.addEventListener('click', () => {
-  handleEditButtonClick(popupEditForm);
-});
-closeEditFormButton.addEventListener('click', () => {
-  closePopup(popupEditForm);
-});
-popupEditForm.addEventListener('click', (event) => {
-  closePopupByClickOnOverlay(event);
-});
-popupContainerEditForm.addEventListener('submit', (event) => {
-  handleEditFormSubmit(event, popupEditForm);
-});
-
-// события формы добавления фотографий
-addButton.addEventListener('click', () => {
-  handleAddButtonClick(popupAddForm);
-});
-closeAddFormButton.addEventListener('click', () => {
-  closePopup(popupAddForm);
-});
-popupAddForm.addEventListener('click', (event) => {
-  closePopupByClickOnOverlay(event);
-});
-popupContainerAddForm.addEventListener('submit', (event) => {
-  handleAddFormSubmit(event, popupAddForm);
-});
-
-// события попапа с приближенной фотографией
-// closeButtonZoomedImage.addEventListener('click', () => {
-//   closePopup(popupZoomedImage);
-// });
-// popupZoomedImage.addEventListener('click', (event) => {
-//   closePopupByClickOnOverlay(event);
-// });
+addButton.addEventListener('click', handleAddButtonClick);
