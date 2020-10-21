@@ -5,7 +5,6 @@ export default class Popup {
 
   open() {
     this._popup.classList.add('popup_opened');
-    // this._page.classList.add('page_overflow-hidden');
 
     // событие нажатия на кнопку клавиатуры
     document.addEventListener('keydown', (event) => {
@@ -28,7 +27,7 @@ export default class Popup {
     }
   }
 
-  _closePopupByClickOnOverlay = (event) => {
+  _closePopupByClickOnOverlay(event) {
     if (event.target !== event.currentTarget) {
       return;
     }
