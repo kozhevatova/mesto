@@ -3,11 +3,11 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
-  entry: { main: './src/index.js' },
+  entry: { main: './index.js' },
   output: {
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, ''),
     filename: 'main.js',
-    publicPath: '/'
+    publicPath: '/mesto/'
   },
   module: {
     rules: [
@@ -52,7 +52,7 @@ module.exports = {
   plugins: [
     // настроили плагин
     new HtmlWebpackPlugin({
-      template: 'src/index.html'
+      template: '/index.html'
     }),
     new MiniCssExtractPlugin()
   ]
