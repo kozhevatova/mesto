@@ -48,10 +48,11 @@ module.exports = {
       }
     ]
   },
+  devtool: 'inline-source-map',
   plugins: [
     // настроили плагин
     new HtmlWebpackPlugin({
-      template: '/src/index.html'
+      template: 'src/index.html'
     }),
     new MiniCssExtractPlugin()
   ]

@@ -7,18 +7,14 @@ export default class Popup {
     this._popup.classList.add('popup_opened');
 
     // событие нажатия на кнопку клавиатуры
-    document.addEventListener('keydown', (event) => {
-      this._handleEscClose(event);
-    });
+    document.addEventListener('keydown',this._handleEscClose.bind(this));
   }
 
   close() {
     this._popup.classList.remove('popup_opened');
 
     // событие нажатия на кнопку клавиатуры
-    document.removeEventListener('keydown', (event) => {
-      this._handleEscClose(event);
-    });
+    document.removeEventListener('keydown',this._handleEscClose.bind(this));
   }
 
   _handleEscClose(event) {

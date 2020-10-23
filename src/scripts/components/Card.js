@@ -1,11 +1,10 @@
 export default class Card {
-  constructor(data, cardSelector, handleCardClick, handleCardDelete) {
+  constructor(data, cardSelector, handleCardClick) {
     this._name = data.name;
     this._link = data.link;
     this._data = data;
     this._cardSelector = cardSelector;
     this._handleCardClick = handleCardClick;
-    this._handleCardDelete = handleCardDelete;
   }
 
   // добавление обработчиков событий
@@ -28,7 +27,6 @@ export default class Card {
 
   // удаление фото
   _handleDeleteButtonClicked() {
-    this._handleCardDelete(this._data);
     this._element.remove();
   }
 

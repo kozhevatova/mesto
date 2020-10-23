@@ -2,40 +2,39 @@ import Card from './scripts/components/Card.js';
 import FormValidator from './scripts/components/FormValidator.js';
 import { initialCards } from './scripts/utils/initialCards.js';
 import PopupWithImage from './scripts/components/PopupWithImage.js';
-import { validationConfig } from './scripts/utils/validationConfig.js';
 import Section from './scripts/components/Section.js';
 import PopupWithForm from './scripts/components/PopupWithForm.js';
-import UserInfo from './scripts/utils/UserInfo.js';
+import UserInfo from './scripts/components/UserInfo.js';
 import {
-  editButton, addButton, inputProfileName, inputProfileDescription
+  editButton, addButton, inputProfileName, inputProfileDescription, validationConfig
 } from './scripts/utils/constants.js';
 import './index.html';
 import './index.css';
 
-const elements = initialCards.slice();
 const userInfo = new UserInfo({
   nameSelector: '.profile__name',
   infoSelector: '.profile__subtitle'
 });
 
-const handleCardDelete = (item) => {
-  elements.splice(initialCards.indexOf(item), 1);
+const zoomedImage = new PopupWithImage({
+  popupSelector: '.popup_type_zoomed-image'
+});
+
+//добавление новой карточки в разметку
+const addCardToCardList = (item) => {
+  const card = new Card(item, '.element-template', () => {
+    zoomedImage.setEventListeners();
+    zoomedImage.open(item.link, item.name);
+  });
+
+  const cardElement = card.generateCard();
+  cardList.addItem(cardElement);
 };
 
 //добавление фотографий на страницу "из коробки"
 const cardList = new Section({
-  items: elements, renderer: (item) => {
-    const card = new Card(item, '.element-template', () => {
-      const zoomedImage = new PopupWithImage({
-        popupSelector: '.popup_type_zoomed-image',
-        image: item
-      });
-      zoomedImage.setEventListeners();
-      zoomedImage.open();
-    }, handleCardDelete);
-
-    const cardElement = card.generateCard();
-    cardList.addItem(cardElement);
+  items: initialCards, renderer: (item) => {
+    addCardToCardList(item);
   }
 }, '.elements');
 
@@ -45,6 +44,7 @@ cardList.renderItems();
 const editFormPopup = new PopupWithForm({
   popupSelector: '.popup_type_edit-form', handleFormSubmit: (event, formValues) => {
     event.preventDefault();
+
     userInfo.setUserInfo(formValues.popupName, formValues.popupDescription);
     editFormPopup.close();
   }
@@ -55,9 +55,7 @@ const addFormPopup = new PopupWithForm({
   popupSelector: '.popup_type_add-form', handleFormSubmit: (event, formValues) => {
     event.preventDefault();
 
-    elements.push({ name: formValues.popupName, link: formValues.popupDescription });
-    cardList.renderItems();
-
+    addCardToCardList({ name: formValues.popupName, link: formValues.popupDescription });
     addFormPopup.close();
   }
 });
@@ -95,3 +93,4 @@ const handleAddButtonClick = () => {
 editButton.addEventListener('click', handleEditButtonClick);
 
 addButton.addEventListener('click', handleAddButtonClick);
+
