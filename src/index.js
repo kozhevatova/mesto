@@ -20,10 +20,11 @@ const zoomedImage = new PopupWithImage({
   popupSelector: '.popup_type_zoomed-image'
 });
 
+zoomedImage.setEventListeners();
+
 //добавление новой карточки в разметку
 const addCardToCardList = (item) => {
   const card = new Card(item, '.element-template', () => {
-    zoomedImage.setEventListeners();
     zoomedImage.open(item.link, item.name);
   });
 
