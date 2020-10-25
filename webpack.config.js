@@ -7,7 +7,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, ''),
     filename: 'main.js',
-    publicPath: '/dist/'
+    publicPath: '/mesto/'
   },
   module: {
     rules: [
