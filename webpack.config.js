@@ -52,7 +52,7 @@ module.exports = {
   plugins: [
     // настроили плагин
     new HtmlWebpackPlugin({
-      template: '/index.html'
+      template: 'index.html'
     }),
     new MiniCssExtractPlugin()
   ]
