@@ -25,7 +25,7 @@
 
 **GitHub Pages**
 
-* [Ссылка на проект в GitHub Pages](https://kozhevatova.github.io/index.html)
+* [Ссылка на проект в GitHub Pages](https://kozhevatova.github.io/mesto/index.html)
 
 
 
