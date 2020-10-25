@@ -20,7 +20,7 @@
   "bugs": {
     "url": "https://github.com/kozhevatova/mesto/issues"
   },
-  "homepage": "https://github.com/kozhevatova/mesto/",
+  "homepage": "https://github.com/kozhevatova/mesto#readme",
   "devDependencies": {
     "@babel/core": "^7.12.3",
     "@babel/preset-env": "^7.12.1",
