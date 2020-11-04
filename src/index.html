@@ -18,7 +18,9 @@
 
         <main class="content">
             <section class="profile">
-                <div class="profile__avatar"></div>
+                <div class="profile__avatar">
+                    <button class="profile__edit-avatar-button"></button>
+                </div>
                 <div class="profile__info">
                     <div class="profile__title">
                         <h1 class="profile__name">Жак-Ив Кусто</h1>
@@ -77,6 +79,27 @@
                 <button class="popup__close-button" type="reset"></button>
             </div>
         </div>
+
+        <div class="popup popup_type_delete-confirm">
+            <form class="popup__form popup__form_type_delete-confirm" name="deleteConfirmForm">
+                <button class="popup__close-button" type="reset" 
+                    aria-label="Закрыть форму подтверждения удаления."></button>
+                <h3 class="popup__title">Вы уверены?</h3>
+                <button type="submit" class="popup__save-button popup__button">Да</button>
+            </form>
+        </div>
+
+        <div class="popup popup_type_edit-avatar-form">
+            <form class="popup__form popup__form_type_edit-avatar" name="editAvatarForm">
+                <button class="popup__close-button" type="reset"
+                    aria-label="Закрыть форму редактирования аватара."></button>
+                <h3 class="popup__title">Обновить аватар</h3>
+                <input type="url" class="popup__input popup__description" name="avatarUrl" 
+                    placeholder="Ссылка на аватар" required id="url-input">
+                <span class="popup__input-error" id="url-input-error"></span>
+                <button type="submit" class="popup__save-button popup__button popup__button_disabled">Сохранить</button>
+            </form>
+        </div>
     </div>
 
     <template id="element-template" class="element-template">
@@ -84,7 +107,11 @@
             <img alt="Фотография." class="element__image">
             <div class="element__title">
                 <h2 class="element__place-name"></h2>
-                <button class="element__like" type="button" aria-label="Поставить лайк."></button>
+                <div class="element__like-container">
+                    <button class="element__like" type="button" aria-label="Поставить лайк."></button>
+                    <p class="element__like-num"></p>
+                </div>
+                
             </div>
             <button class="element__delete-button" type="button" aria-label="Удалить фото."></button>
         </li>

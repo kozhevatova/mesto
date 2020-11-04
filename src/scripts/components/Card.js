@@ -1,10 +1,14 @@
 export default class Card {
-  constructor(data, cardSelector, handleCardClick) {
+  constructor(data, {handleCardClick, handleLikeAdd, handleLikeDelete, handleCardDelete}, cardSelector) {
     this._name = data.name;
     this._link = data.link;
+    this._likes = data.likes;
     this._data = data;
     this._cardSelector = cardSelector;
     this._handleCardClick = handleCardClick;
+    this._handleLikeAdd = handleLikeAdd;
+    this._handleLikeDelete = handleLikeDelete;
+    this._handleCardDelete = handleCardDelete;
   }
 
   // добавление обработчиков событий
@@ -16,7 +20,7 @@ export default class Card {
 
     // удаление фото
     this._element.querySelector('.element__delete-button').addEventListener('click', (event) => {
-      this._handleDeleteButtonClicked(event);
+      this._handleCardDelete();
     });
 
     // зум фото
@@ -26,13 +30,30 @@ export default class Card {
   }
 
   // удаление фото
-  _handleDeleteButtonClicked() {
+  removeCard(){
     this._element.remove();
+  }
+
+  //удалить иконку удаления фото с карточек созданных не владельцем профиля
+  disableDelete() {
+    this._element.querySelector('.element__delete-button').remove();
   }
 
   // лайк фото
   _handleLikeClicked() {
-    this._element.querySelector('.element__like').classList.toggle('element__like_active');
+    this._likeElement = this._element.querySelector('.element__like');
+
+    if (this._likeElement.classList.contains('element__like_active')) {
+      this._likeElement.classList.remove('element__like_active');
+      this._handleLikeDelete();
+    } else {
+      this._likeElement.classList.add('element__like_active');
+      this._handleLikeAdd();
+    }
+  }
+
+  showLikes(num) {
+    this._element.querySelector('.element__like-num').textContent = num;
   }
 
   _getTemplate() {
@@ -45,6 +66,7 @@ export default class Card {
 
     this._element.querySelector('.element__image').src = this._link;
     this._element.querySelector('.element__place-name').textContent = this._name;
+    this._element.querySelector('.element__like-num').textContent = this._likes.length;
 
     this._setEventListeners();
 
