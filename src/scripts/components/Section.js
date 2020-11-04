@@ -13,7 +13,11 @@ export default class Section {
     cards.forEach(item => this._renderer(item));
   }
 
-  addItem(item) {
+  prependItem(item) {
     this._container.prepend(item);
+  }
+
+  appendItem(item) {
+    this._container.append(item);
   }
 }

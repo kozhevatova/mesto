@@ -1,9 +1,17 @@
+import Popup from "./Popup";
 import PopupWithForm from "./PopupWithForm";
 
 export default class PopupWithConfirm extends PopupWithForm {
-  open(item, id) {
+  open(itemElementToDelete, itemId) {
     super.open();
-    this.item = item;
-    this.id = id;
+    this.itemElementToDelete = itemElementToDelete;
+    this.itemId = itemId;
+  }
+
+  setEventListeners() {
+    super.setEventListeners();
+    this.form.addEventListener('submit', (event) => {
+      this._handleFormSubmit(event);
+    });
   }
 }

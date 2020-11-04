@@ -1,5 +1,5 @@
 export default class Card {
-  constructor(data, cardSelector, handleCardClick, handleLikeAdd, handleLikeDelete, handleCardDelete) {
+  constructor(data, {handleCardClick, handleLikeAdd, handleLikeDelete, handleCardDelete}, cardSelector) {
     this._name = data.name;
     this._link = data.link;
     this._likes = data.likes;
@@ -20,7 +20,7 @@ export default class Card {
 
     // удаление фото
     this._element.querySelector('.element__delete-button').addEventListener('click', (event) => {
-      this._handleDeleteButtonClicked(event);
+      this._handleCardDelete();
     });
 
     // зум фото
@@ -30,17 +30,17 @@ export default class Card {
   }
 
   // удаление фото
-  _handleDeleteButtonClicked() {
-    this._handleCardDelete();
-  }
-
   removeCard(){
     this._element.remove();
   }
 
+  //удалить иконку удаления фото с карточек созданных не владельцем профиля
+  disableDelete() {
+    this._element.querySelector('.element__delete-button').remove();
+  }
+
   // лайк фото
   _handleLikeClicked() {
-    console.log(this._data.likes);
     this._likeElement = this._element.querySelector('.element__like');
 
     if (this._likeElement.classList.contains('element__like_active')) {

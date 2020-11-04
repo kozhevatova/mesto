@@ -132,4 +132,24 @@ export default class Api {
       console.log(err);
     });
   }
+
+  editAvatar(avatar) {
+    return fetch(`${this.baseUrl}/users/me/avatar`, {
+      headers: this.headers,
+      method: 'PATCH',
+      body: JSON.stringify({
+        avatar: avatar
+      })
+    })
+    .then((res) => {
+      if(res.ok) {
+        return res.json();
+      }
+      return Promise.reject(`Ошибка: ${res.status}`);
+    })
+    .then((result) => result)
+    .catch((err) => {
+      console.log(err);
+    });
+  }
 }
