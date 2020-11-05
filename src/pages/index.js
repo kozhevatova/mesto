@@ -1,25 +1,25 @@
-import Card from './scripts/components/Card.js';
-import FormValidator from './scripts/components/FormValidator.js';
-import PopupWithImage from './scripts/components/PopupWithImage.js';
-import Section from './scripts/components/Section.js';
-import PopupWithForm from './scripts/components/PopupWithForm.js';
-import UserInfo from './scripts/components/UserInfo.js';
+import Card from '../scripts/components/Card.js';
+import FormValidator from '../scripts/components/FormValidator.js';
+import PopupWithImage from '../scripts/components/PopupWithImage.js';
+import Section from '../scripts/components/Section.js';
+import PopupWithForm from '../scripts/components/PopupWithForm.js';
+import UserInfo from '../scripts/components/UserInfo.js';
 import {
-  editButton, 
-  addButton, 
-  inputProfileName, 
-  inputProfileDescription, 
+  editButton,
+  addButton,
+  inputProfileName,
+  inputProfileDescription,
   validationConfig,
   editAvatarButton,
-  buttonLoadingText,
   saveButtonEditForm,
   saveButtonAddForm,
   saveButtonEditAvatarForm
-} from './scripts/utils/constants.js';
-import './index.html';
+} from '../scripts/utils/constants.js';
+import '../index.html';
 import './index.css';
-import Api from './scripts/components/Api.js';
-import PopupWithConfirm from './scripts/components/PopupWithConfirm.js';
+import Api from '../scripts/components/Api.js';
+import PopupWithConfirm from '../scripts/components/PopupWithConfirm.js';
+import { renderLoading } from '../scripts/utils/utils.js';
 
 const userInfo = new UserInfo({
   nameSelector: '.profile__name',
@@ -42,28 +42,43 @@ const api = new Api({
   }
 });
 
-api.getUserInfo().then((res) => {
-  userInfo.setUserInfo(res.name, res.about, res.avatar, res._id);
-});
-
-const cards = api.getInitialCards().then((res) => cardList.renderItems(res));
-
+//отрисовка данных с сервера
+Promise.all([
+  api.getUserInfo(),
+  api.getInitialCards()
+])
+  .then((values) => {
+    const [userData, initialCards] = values;
+    userInfo.setUserInfo(userData.name, userData.about, userData.avatar, userData._id);
+    cardList.renderItems(initialCards);
+  })
+  .catch((err) => {
+    console.log(err);
+  });
 
 //добавление новой карточки в разметку
 const addCardToCardList = (item) => {
   const card = new Card(item, {
-    handleCardClick: () => {
-      zoomedImage.open(item.link, item.name);
+    handleCardClick: (link, name) => {
+      zoomedImage.open(link, name);
     },
     handleLikeAdd: () => {
       api.addLike(item._id).then((res) => {
+        card.likeElement.classList.add('element__like_active');
         card.showLikes(res.likes.length);
-      });
+      })
+        .catch((err) => {
+          console.log(err);
+        });
     },
     handleLikeDelete: () => {
       api.deleteLike(item._id).then((res) => {
+        card.likeElement.classList.remove('element__like_active');
         card.showLikes(res.likes.length);
-      });
+      })
+        .catch((err) => {
+          console.log(err);
+        });
     },
     handleCardDelete: () => {
       deleteConfirmPopup.open(card, item._id);
@@ -78,7 +93,6 @@ const addCardToCardList = (item) => {
   }
 
   return cardElement;
-  // cardList.addItem(cardElement);
 };
 
 const appendCard = (cardElement) => {
@@ -91,19 +105,10 @@ const prependCard = (cardElement) => {
 
 //добавление фотографий на страницу "из коробки"
 const cardList = new Section({
-  items: cards, renderer: (item) => {
+  renderer: (item) => {
     appendCard(addCardToCardList(item));
   }
 }, '.elements');
-
-//Изменение текста кнопки сохранения во время загрузки
-const renderLoading = (button, isLoading, text) => {
-  if(isLoading) {
-    button.text = buttonLoadingText;
-  } else {
-    button.text = text;
-  }
-}
 
 //попап с формой редактирования профиля
 const editFormPopup = new PopupWithForm({
@@ -113,11 +118,16 @@ const editFormPopup = new PopupWithForm({
     renderLoading(saveButtonEditForm, true, 'Сохранить');
     api.editUserInfo(formValues.popupName, formValues.popupDescription).then((res) => {
       userInfo.setUserInfo(res.name, res.about, res.avatar, res._id);
-    }).finally(() => {
-      renderLoading(saveButtonEditForm, false, 'Сохранить');
-    });
-
-    editFormPopup.close();
+    })
+      .then(() => {
+        editFormPopup.close();
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        renderLoading(saveButtonEditForm, false, 'Сохранить');
+      });
   }
 });
 
@@ -130,11 +140,16 @@ const addFormPopup = new PopupWithForm({
     api.addNewCard(formValues.popupName, formValues.popupDescription).then((res) => {
       prependCard(addCardToCardList(res));
       console.log(saveButtonAddForm.text);
-    }).finally(() => {
-      renderLoading(saveButtonAddForm, false, 'Создать');
-    });
-
-    addFormPopup.close();
+    })
+      .then(() => {
+        addFormPopup.close();
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        renderLoading(saveButtonAddForm, false, 'Создать');
+      });
   }
 });
 
@@ -143,11 +158,15 @@ const deleteConfirmPopup = new PopupWithConfirm({
   popupSelector: '.popup_type_delete-confirm', handleFormSubmit: (evt) => {
     evt.preventDefault();
 
-    api.deleteCard(deleteConfirmPopup.itemId).then((res) => {
+    api.deleteCard(deleteConfirmPopup.itemId).then(() => {
       deleteConfirmPopup.itemElementToDelete.removeCard();
-    });
-
-    deleteConfirmPopup.close();
+    })
+      .then(() => {
+        deleteConfirmPopup.close();
+      })
+      .catch((err) => {
+        console.log(err);
+      });;
   }
 });
 
@@ -158,11 +177,16 @@ const editAvatarPopup = new PopupWithForm({
     renderLoading(saveButtonEditAvatarForm, true, 'Сохранить');
     api.editAvatar(formValues.avatarUrl).then((res) => {
       userInfo.setUserInfo(res.name, res.about, res.avatar, res._id);
-    }).finally(() => {
-      renderLoading(saveButtonEditAvatarForm, false, 'Сохранить');
-    });
-
-    editAvatarPopup.close();
+    })
+      .then(() => {
+        editAvatarPopup.close();
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        renderLoading(saveButtonEditAvatarForm, false, 'Сохранить');
+      });
   }
 });
 

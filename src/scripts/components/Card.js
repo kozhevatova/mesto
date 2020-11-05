@@ -25,7 +25,7 @@ export default class Card {
 
     // зум фото
     this._element.querySelector('.element__image').addEventListener('click', () => {
-      this._handleCardClick();
+      this._handleCardClick(this._link, this._name);
     });
   }
 
@@ -41,13 +41,11 @@ export default class Card {
 
   // лайк фото
   _handleLikeClicked() {
-    this._likeElement = this._element.querySelector('.element__like');
+    this.likeElement = this._element.querySelector('.element__like');
 
-    if (this._likeElement.classList.contains('element__like_active')) {
-      this._likeElement.classList.remove('element__like_active');
+    if (this.likeElement.classList.contains('element__like_active')) {
       this._handleLikeDelete();
     } else {
-      this._likeElement.classList.add('element__like_active');
       this._handleLikeAdd();
     }
   }
